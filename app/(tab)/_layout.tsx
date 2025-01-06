@@ -14,7 +14,7 @@ export default function TabLayout() {
     return (
         // 使用 prop 来改变标签栏和标题的背景颜色
         <Tabs screenOptions={{
-            tabBarActiveTintColor:"#ffd33d", // 更改底部tab标签颜色
+            tabBarActiveTintColor:'#fff', // 更改底部tab标签颜色
             headerStyle:{
                 backgroundColor:'#25292e'    // 将标题的背景设置为25292e
             },

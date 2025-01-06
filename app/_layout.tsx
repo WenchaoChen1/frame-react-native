@@ -1,5 +1,8 @@
 import { Stack } from "expo-router";
 import Home from "@/app-example-example/app-example/home";
+import {NavigationContainer} from "@react-navigation/native";
+import React from "react";
+import HomeScreen from "@/app-example-example/app-example/(tabs)";
 
 export default function RootLayout() {
   // return <Stack />;
@@ -10,7 +13,7 @@ export default function RootLayout() {
 
   return (
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
+        <Stack.Screen name="(tab)" options={{ headerShown: false }}/>
         <Stack.Screen name="+not-found"/>
       </Stack>
   )

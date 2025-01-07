@@ -1,4 +1,3 @@
-/*
 import React, { createContext, useContext, useState } from 'react';
 
 interface AuthContextType {
@@ -36,4 +35,3 @@ export const useAuth = () => {
   }
   return context;
 };
-*/

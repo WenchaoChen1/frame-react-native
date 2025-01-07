@@ -11,25 +11,21 @@ export default function HeaderFeedFollow({onDiscoverPress, onFollowingPress}: Pr
 
     const [isPressedDiscover,setIsPressedDiscover] = useState(true);
 
-    useEffect(() => {
-        console.log(isPressedDiscover ? 'Discover is pressed!' : 'Following is pressed!');
-    }, [isPressedDiscover]);
-
     return (
         <View style={styles.container}>
             {/* Discover 按钮 */}
             <TouchableOpacity
                 style={[
                     styles.button,
-                    !isPressedDiscover && styles.buttonPressed, // 根据状态动态改变样式
+                    isPressedDiscover && styles.buttonPressed, // 根据状态动态改变样式
                 ]}
                 onPress={() => {
                     console.log('Button Discover!');
-                    setIsPressedDiscover(false); // 切换到 Discover 状态
+                    setIsPressedDiscover(true); // 切换到 Discover 状态
                     onDiscoverPress();
                 }}
             >
-                <Text style={[styles.buttonText,!isPressedDiscover && styles.buttonTextPressed]}>Discover</Text>
+                <Text style={[styles.buttonText,isPressedDiscover && styles.buttonTextPressed]}>Discover</Text>
             </TouchableOpacity>
 
 
@@ -39,15 +35,15 @@ export default function HeaderFeedFollow({onDiscoverPress, onFollowingPress}: Pr
             <TouchableOpacity
                 style={[
                     styles.button,
-                    isPressedDiscover && styles.buttonPressed, // 根据状态动态改变样式
+                    !isPressedDiscover && styles.buttonPressed, // 根据状态动态改变样式
                 ]}
                 onPress={() => {
                     console.log('Button Following!');
-                    setIsPressedDiscover(true); // 切换到 Following 状态
+                    setIsPressedDiscover(false); // 切换到 Following 状态
                     onFollowingPress();
                 }}
             >
-                <Text style={[styles.buttonText,isPressedDiscover && styles.buttonTextPressed]}>Following</Text>
+                <Text style={[styles.buttonText,!isPressedDiscover && styles.buttonTextPressed]}>Following</Text>
             </TouchableOpacity>
         </View>
     )

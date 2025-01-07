@@ -13,8 +13,10 @@ export default function RootLayout() {
 
   return (
       <Stack>
-        <Stack.Screen name="(tab)" options={{ headerShown: false }}/>
+        <Stack.Screen name="(tab)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found"/>
+         <Stack.Screen name="follow-detail/index" options={{ headerShown: false }} />
       </Stack>
+
   )
 }

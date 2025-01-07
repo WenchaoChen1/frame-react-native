@@ -4,6 +4,7 @@ import HeaderFeedFollow from "@/components/feed/HeaderFeedFollow";
 import FollowCard from "@/components/feed/FollowCard";
 import followListData from "@/data/feed/FollowListData";
 import FollowCardItem from "@/components/feed/FollowCardItem";
+import {router} from "expo-router";
 
 export default function FeedScreen() {
 
@@ -27,12 +28,13 @@ export default function FeedScreen() {
         console.log("OnCancelClick---");
     }
 
-    const handleFollowItemClick=()=>{
-        console.log("handleFollowItemClick---");
+    const handleFollowItemClick=(id:string)=>{
+       // router.push("/follow-detail")
+        router.push({pathname:"/follow-detail",params:{id}})
     }
     // 渲染单个卡片
     const followItem = () => (
-        <FollowCardItem titleName={"234"} latestDraft={"34324"} plays={23} coins={90} onCancelClick={handleOnCancelClick} onItemClick={handleFollowItemClick}/>
+        <FollowCardItem id={"27302407"} titleName={"234"} latestDraft={"34324"} plays={23} coins={90} onCancelClick={handleOnCancelClick} onItemClick={handleFollowItemClick}/>
     )
 
     return (

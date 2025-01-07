@@ -3,19 +3,22 @@ import {ImageSource} from "expo-image";
 
 type FollowCardItemProps = {
     //avatar : ImageSource;
+    id:string
     titleName:string;
     latestDraft:string
     plays:number
     coins:number
     onCancelClick : () => void
-    onItemClick:()=>void
+    onItemClick:(id:string)=>void
 }
 
 // 单个卡片组件
-export default function  FollowCardItem({titleName,latestDraft,plays,coins,onCancelClick,onItemClick }: FollowCardItemProps) {
+export default function  FollowCardItem({id,titleName,latestDraft,plays,coins,onCancelClick,onItemClick }: FollowCardItemProps) {
 
     return (
-        <TouchableOpacity onPress={onItemClick}>
+        <TouchableOpacity onPress={()=>{
+            onItemClick(id)
+        }}>
             <View style={styles.card} >
                 {/* 左边：头像 */}
                 <Image

@@ -4,7 +4,7 @@
 # You can edit the include path and order by changing the proguardFiles
 # directive in build.gradle.
 #
-# For more details, see
+# For more index, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # react-native-reanimated

@@ -3,7 +3,7 @@
         {
             id: '1',
             avatar: 'https://via.placeholder.com/50',
-            title: 'People who follow you back',
+            title: 'People who follow-detail you back',
             description: 'See all your friends',
         },
         {

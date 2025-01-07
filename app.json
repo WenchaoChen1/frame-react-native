@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Myapp",
-    "slug": "Myapp",
+    "name": "frame-react-native",
+    "slug": "frame-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -11,12 +11,13 @@
     "ios": {
       "supportsTablet": true
     },
+    "developmentClient": true,
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.coke_hui.Myapp"
+      "package": "com.yipenwang.framereactnative"
     },
     "web": {
       "bundler": "metro",
@@ -28,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/adaptive-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
@@ -37,6 +38,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b10d6a66-b734-40fa-9fe4-5194906b4589"
+      }
+    },
+    "owner": "yipenwang"
   }
 }

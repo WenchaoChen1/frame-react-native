@@ -1,17 +1,32 @@
+import { AuthProvider } from "@/scripts/context/AuthContext";
 import { Stack } from "expo-router";
-import Home from "@/app-example-example/app-example/home";
+import { useState } from "react";
 
 export default function RootLayout() {
-  // return <Stack />;
-  // return <Stack>
-  //   <Stack.Screen name="index" options={{ title: "Home" }} />
-  //   <Stack.Screen name="about" options={{ title: "About" }} />
-  // </Stack>
+  const [user, setUser] = useState<string | null>(null);
 
+  // 登录函数
+  const login = (username: string) => {
+    setUser(username);
+  };
+
+  // 登出函数
+  const logout = () => {
+    setUser(null);
+  };
+
+  // 提供的 Context 值
+  const value = {
+    user,
+    login,
+    logout,
+  };
   return (
+    <AuthProvider value={value}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
+        <Stack.Screen name="(tab)" options={{ headerShown: false }}/>
         <Stack.Screen name="+not-found"/>
       </Stack>
+    </AuthProvider>
   )
 }

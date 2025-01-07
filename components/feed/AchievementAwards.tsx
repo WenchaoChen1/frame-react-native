@@ -1,0 +1,40 @@
+import {FlatList, StyleSheet, Text, View} from "react-native";
+import React from "react";
+import AchievementAwardsItem from "@/components/feed/AchievementAwardsItem";
+
+
+type AchievementAwardsProps = {
+    dataList: ArrayLike<any>;
+}
+export default function AchievementAwards ({dataList}: AchievementAwardsProps   ) {
+
+    return (
+       <View style={styles.container}>
+           <Text style={styles.title}>Achievement & Awards</Text>
+
+           <FlatList
+               data={dataList}
+               renderItem={({ item }) => (
+                   <AchievementAwardsItem description={item.descriptive} />
+               )}
+               keyExtractor={(item) => item.id}
+               contentContainerStyle={styles.listcontainer}
+           />
+       </View>
+    )
+}
+
+
+const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal:16
+    },
+    title:{
+        fontSize: 16,
+        marginBottom: 10,
+        color: 'white',
+    },
+    listcontainer:{
+        marginBottom:25,
+    }
+})

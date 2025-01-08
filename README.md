@@ -78,6 +78,7 @@ On running, this command:
 4. Build preview
 ```bash
 eas build -p android --profile preview
+eas build --profile development --platform ios
 ```
 
 

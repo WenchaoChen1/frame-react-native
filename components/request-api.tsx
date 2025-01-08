@@ -1,4 +1,3 @@
-/*
 // 使用请求接口方法的案例
 import React from 'react';
 import { View, Text, Button, ActivityIndicator } from 'react-native';
@@ -13,18 +12,18 @@ const MyComponent = () => {
     error: userError,
   } = useQuery<User>({
     queryKey: ['user'],
-    queryFn: () => get<User>('/user/1').then((res) => res.data),
+    queryFn: () => get<User>('/user/1').then(res => res.data),
   });
 
   // 使用 useMutation 处理登录请求
 
   const loginMutation = useMutation<LoginResponse, Error, LoginRequest>({
-    mutationFn: (credentials) =>
-      post<LoginResponse>('/login', credentials).then((res) => res.data),
-    onSuccess: (data) => {
+    mutationFn: credentials =>
+      post<LoginResponse>('/login', credentials).then(res => res.data),
+    onSuccess: data => {
       console.log('Login successful:', data);
     },
-    onError: (error) => {
+    onError: error => {
       console.error('Login failed:', error);
     },
   });
@@ -49,4 +48,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;*/
+export default MyComponent;

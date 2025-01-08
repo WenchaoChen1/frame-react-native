@@ -1,9 +1,9 @@
 // api/api.ts
 import axios, { AxiosHeaders } from 'axios';
-import { HeadersDefaults, RawAxiosRequestHeaders } from "axios/index";
+import { HeadersDefaults, RawAxiosRequestHeaders } from 'axios/index';
 
 // 定义 API 的基础 URL
-const BASE_URL = 'https://your-backend-api.com';
+const BASE_URL = 'http://192.168.0.111:8103';
 
 // 创建 axios 实例
 const apiClient = axios.create({
@@ -21,9 +21,13 @@ interface ApiResponse<T> {
 }
 
 // 封装 GET 请求
-export const get = async <T>(url: string, params?: Record<string, any>): Promise<ApiResponse<T>> => {
+export const get = async <T>(
+  url: string,
+  params?: Record<string, any>
+): Promise<ApiResponse<T>> => {
   try {
     const response = await apiClient.get<T>(url, { params });
+    // console.log(response, 'response');
     return {
       data: response.data,
       status: response.status,
@@ -36,7 +40,10 @@ export const get = async <T>(url: string, params?: Record<string, any>): Promise
 };
 
 // 封装 POST 请求
-export const post = async <T>(url: string, data?: Record<string, any>): Promise<ApiResponse<T>> => {
+export const post = async <T>(
+  url: string,
+  data?: Record<string, any>
+): Promise<ApiResponse<T>> => {
   try {
     const response = await apiClient.post<T>(url, data);
     return {
@@ -51,7 +58,10 @@ export const post = async <T>(url: string, data?: Record<string, any>): Promise<
 };
 
 // 封装 PUT 请求
-export const put = async <T>(url: string, data?: Record<string, any>): Promise<ApiResponse<T>> => {
+export const put = async <T>(
+  url: string,
+  data?: Record<string, any>
+): Promise<ApiResponse<T>> => {
   try {
     const response = await apiClient.put<T>(url, data);
     return {

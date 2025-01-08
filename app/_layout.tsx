@@ -1,11 +1,10 @@
-import { AuthProvider } from "@/scripts/context/AuthContext";
-import { Stack } from "expo-router";
-import { useState } from "react";
-import Home from "@/app-example-example/app-example/home";
-import {NavigationContainer} from "@react-navigation/native";
-import React from "react";
-import HomeScreen from "@/app-example-example/app-example/(tabs)";
-
+import { AuthProvider } from '@/scripts/context/AuthContext';
+import { QueryClient } from '@tanstack/query-core';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Stack } from 'expo-router';
+import { useState } from 'react';
+import React from 'react';
+const queryClient = new QueryClient();
 export default function RootLayout() {
   const [user, setUser] = useState<string | null>(null);
 
@@ -26,13 +25,17 @@ export default function RootLayout() {
     logout,
   };
   return (
-    <AuthProvider value={value}>
-      <Stack>
-        <Stack.Screen name="(tab)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found"/>
-         <Stack.Screen name="follow-detail/index" options={{ headerShown: false }} />
-      </Stack>
-
-    </AuthProvider>
-  )
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider value={value}>
+        <Stack>
+          <Stack.Screen name="(tab)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="follow-detail/index"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
 }

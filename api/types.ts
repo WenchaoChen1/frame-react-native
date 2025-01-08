@@ -64,7 +64,7 @@ export interface MusicianPageListData {
   error?: ErrorData;
 }
 
-export interface MusicianDateilData {
+export interface MusicianDetailData {
   data: MusicianDateilInfo;
   code: number;
   message: string;

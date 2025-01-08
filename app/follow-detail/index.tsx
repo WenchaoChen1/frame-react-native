@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { get } from '@/api/api';
-import { MusicianDateilData, MusicianDateilInfo } from '@/api/types';
+import { MusicianDateilInfo, MusicianDetailData } from '@/api/types';
 
 export default function MusicianId() {
   const { id } = useLocalSearchParams();
@@ -24,10 +24,10 @@ export default function MusicianId() {
     data: musicianDetailData,
     isLoading: isMusLoading,
     error: musicianDetailError,
-  } = useQuery<MusicianDateilData>({
+  } = useQuery<MusicianDetailData>({
     queryKey: ['musicianDetailGet'],
     queryFn: () =>
-      get<MusicianDateilData>(
+      get<MusicianDetailData>(
         `/musician/get-musician-manage-detail/${id}`
       ).then(res => res.data),
   });

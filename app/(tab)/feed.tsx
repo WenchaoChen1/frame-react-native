@@ -14,7 +14,7 @@ import { get } from '@/api/api';
 import HeaderFeedFollow from '@/components/feed/HeaderFeedFollow';
 import FollowCard from '@/components/feed/FollowCard';
 import FollowCardItem from '@/components/feed/FollowCardItem';
-import { MusicianList, MusicianPageListData } from '@/api/types';
+import { MusicianPageListData } from '@/api/types';
 
 export default function FeedScreen() {
   const [ShowDiscoverPage, setShowDiscoverPage] = useState(true);

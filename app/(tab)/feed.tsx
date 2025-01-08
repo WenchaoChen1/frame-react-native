@@ -14,7 +14,7 @@ import { get } from '@/api/api';
 import HeaderFeedFollow from '@/components/feed/HeaderFeedFollow';
 import FollowCard from '@/components/feed/FollowCard';
 import FollowCardItem from '@/components/feed/FollowCardItem';
-import { MusicianPageListData } from '@/api/types';
+import { MusicianList, MusicianPageListData } from '@/api/types';
 
 export default function FeedScreen() {
   const [ShowDiscoverPage, setShowDiscoverPage] = useState(true);
@@ -31,7 +31,7 @@ export default function FeedScreen() {
       ),
   });
 
-  const [musicianDataList, setMusicianDataList] = useState([]);
+  const [musicianDataList, setMusicianDataList] = useState<MusicianList[]>([]);
   const [musicianDataListTotal, setMusicianDataListTotal] = useState(0);
   const [musicianDataListTotalPages, setMusicianDataListTotalPages] =
     useState(0);

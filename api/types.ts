@@ -65,7 +65,7 @@ export interface MusicianPageListData {
 }
 
 export interface MusicianDetailData {
-  data: MusicianDateilInfo;
+  data: MusicianDetailInfo;
   code: number;
   message: string;
   path: null;
@@ -75,7 +75,7 @@ export interface MusicianDetailData {
   error?: ErrorData;
 }
 
-export interface MusicianDateilInfo {
+export interface MusicianDetailInfo {
   musicianId: string;
   firstName: string;
   lastName: string;

@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "frame-react-native",
-    "slug": "frame-react-native",
+    "name": "TuneDraft",
+    "slug": "TuneDraft",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "TuneDraft",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yipenwang.framereactnative"
+      "bundleIdentifier": "com.fy.TuneDraft"
     },
     "developmentClient": true,
     "android": {
@@ -18,7 +18,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.yipenwang.framereactnative"
+      "package": "com.fy.TuneDraft"
     },
     "web": {
       "bundler": "metro",
@@ -45,7 +45,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "b10d6a66-b734-40fa-9fe4-5194906b4589"
+        "projectId": "3ea32ee7-e330-47c0-b486-548cc8af9e7e"
       }
     },
     "owner": "yipenwang"

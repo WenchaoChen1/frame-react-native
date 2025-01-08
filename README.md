@@ -76,9 +76,19 @@ On running, this command:
 * [3-2]. Creates eas.json in the root of our project's directory with the following configuration
 
 4. Build preview
+  to get .apk 
 ```bash
-eas build -p android --profile preview
+eas build -p android --profile preview  
+```
+or
+
+for ios
+
+```bash
+eas build --profile development --platform ios
 ```
 
-
-
+Run the eas build command with ios as a platform and ios-simulator as the build profile:
+```bash
+eas build --platform ios --profile ios-simulator
+```

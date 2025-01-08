@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { get } from '@/api/api';
-import { MusicianDateilInfo, MusicianDetailData } from '@/api/types';
+import { MusicianDetailInfo, MusicianDetailData } from '@/api/types';
 
 export default function MusicianId() {
   const { id } = useLocalSearchParams();
@@ -33,7 +33,7 @@ export default function MusicianId() {
   });
 
   const [musicianDetailContent, setMusicianDetailContent] =
-    useState<MusicianDateilInfo>();
+    useState<MusicianDetailInfo>();
 
   useEffect(() => {
     if (

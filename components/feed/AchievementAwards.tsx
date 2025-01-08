@@ -23,6 +23,7 @@ export default function AchievementAwards({
             )}
             keyExtractor={item => item.awardId}
             contentContainerStyle={styles.listcontainer}
+            scrollEnabled={false} // 禁用 FlatList 的滚动
           />
         </View>
       )}

@@ -10,9 +10,13 @@ import { useLayoutEffect } from 'react';
 
 export default function MusicianId() {
   const { id } = useLocalSearchParams();
-
+  console.log(id, '>>');
   const onBackPress = () => {
-    router.back();
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.push('/feed');
+    }
   };
 
   const onCancelFollowClicl = () => {

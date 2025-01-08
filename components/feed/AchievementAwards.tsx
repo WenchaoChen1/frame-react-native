@@ -1,40 +1,45 @@
-import {FlatList, StyleSheet, Text, View} from "react-native";
-import React from "react";
-import AchievementAwardsItem from "@/components/feed/AchievementAwardsItem";
-
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import AchievementAwardsItem from '@/components/feed/AchievementAwardsItem';
+import { MusicianDateilInfoAward } from '@/api/types';
 
 type AchievementAwardsProps = {
-    dataList: ArrayLike<any>;
+  dataList: MusicianDateilInfoAward[];
+};
+export default function AchievementAwards({
+  dataList,
+}: AchievementAwardsProps) {
+  return (
+    <View>
+      {dataList.length === 0 ? (
+        <Text></Text>
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.title}>Achievement & Awards</Text>
+          <FlatList
+            data={dataList}
+            renderItem={({ item }) => (
+              <AchievementAwardsItem description={item.description} />
+            )}
+            keyExtractor={item => item.awardId}
+            contentContainerStyle={styles.listcontainer}
+          />
+        </View>
+      )}
+    </View>
+  );
 }
-export default function AchievementAwards ({dataList}: AchievementAwardsProps   ) {
-
-    return (
-       <View style={styles.container}>
-           <Text style={styles.title}>Achievement & Awards</Text>
-
-           <FlatList
-               data={dataList}
-               renderItem={({ item }) => (
-                   <AchievementAwardsItem description={item.descriptive} />
-               )}
-               keyExtractor={(item) => item.id}
-               contentContainerStyle={styles.listcontainer}
-           />
-       </View>
-    )
-}
-
 
 const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal:16
-    },
-    title:{
-        fontSize: 16,
-        marginBottom: 10,
-        color: 'white',
-    },
-    listcontainer:{
-        marginBottom:25,
-    }
-})
+  container: {
+    paddingHorizontal: 16,
+  },
+  title: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: 'white',
+  },
+  listcontainer: {
+    marginBottom: 25,
+  },
+});

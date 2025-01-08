@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import {
+  ActivityIndicator,
   FlatList,
   ListRenderItemInfo,
   StyleSheet,
@@ -12,9 +13,8 @@ import { router } from 'expo-router';
 import { get } from '@/api/api';
 import HeaderFeedFollow from '@/components/feed/HeaderFeedFollow';
 import FollowCard from '@/components/feed/FollowCard';
-import followListData from '@/data/feed/FollowListData';
 import FollowCardItem from '@/components/feed/FollowCardItem';
-import { MusicianData, PageListData } from '@/api/types';
+import { MusicianList, MusicianPageListData } from '@/api/types';
 
 export default function FeedScreen() {
   const [ShowDiscoverPage, setShowDiscoverPage] = useState(true);
@@ -23,10 +23,10 @@ export default function FeedScreen() {
     data: musicianData,
     isLoading: isMusLoading,
     error: musicianError,
-  } = useQuery<PageListData>({
+  } = useQuery<MusicianPageListData>({
     queryKey: ['musicianGet'],
     queryFn: () =>
-      get<PageListData>('/musician/get-musician-manage-page').then(
+      get<MusicianPageListData>('/musician/get-musician-manage-page').then(
         res => res.data
       ),
   });
@@ -37,9 +37,9 @@ export default function FeedScreen() {
     useState(0);
 
   useEffect(() => {
-    setMusicianDataList(musicianData?.data?.content);
-    setMusicianDataListTotal(musicianData?.data?.totalElements);
-    setMusicianDataListTotalPages(musicianData?.data?.totalPages);
+    setMusicianDataList(musicianData?.data?.content ?? []);
+    setMusicianDataListTotal(musicianData?.data?.totalElements ?? 0);
+    setMusicianDataListTotalPages(musicianData?.data?.totalPages ?? 0);
   }, [musicianData]);
 
   console.log(musicianData, '...');
@@ -64,6 +64,19 @@ export default function FeedScreen() {
   const handleFollowItemClick = (id: string) => {
     router.push({ pathname: '/follow-detail', params: { id } });
   };
+
+  if (isMusLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (musicianError) {
+    return <Text> Server Exception Load Failure: {musicianError.message}</Text>;
+  }
+
   // 渲染单个卡片
   const followItem = (data: any) => {
     console.log(data, 'data');
@@ -96,7 +109,7 @@ export default function FeedScreen() {
           <FollowCard onMoreClick={handleOnMoreClick}></FollowCard>
 
           <FlatList
-            data={musicianDataList || followListData}
+            data={musicianDataList}
             renderItem={followItem}
             keyExtractor={item => item.musicianId}
             contentContainerStyle={styles.listContainer}
@@ -127,5 +140,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 300,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0E0E0E',
   },
 });

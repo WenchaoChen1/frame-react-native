@@ -21,7 +21,7 @@ export interface LoginResponse {
   user: User;
 }
 
-export interface MusicianData {
+export interface MusicianList {
   musicianId: string;
   firstName: string;
   lastName: string;
@@ -39,10 +39,10 @@ export interface MusicianData {
   updatedAccount: string;
 }
 
-export interface ListData {
+export interface MusicianListData {
   totalPages: number;
   totalElements: number;
-  content: MusicianData[];
+  content: MusicianList[];
 }
 
 export interface ErrorData {
@@ -53,8 +53,8 @@ export interface ErrorData {
   field: string;
 }
 
-export interface PageListData {
-  data: ListData;
+export interface MusicianPageListData {
+  data: MusicianListData;
   code: number;
   message: string;
   path: null;
@@ -62,4 +62,54 @@ export interface PageListData {
   success: boolean;
   timestamp: string;
   error?: ErrorData;
+}
+
+export interface MusicianDateilData {
+  data: MusicianDateilInfo;
+  code: number;
+  message: string;
+  path: null;
+  status: number;
+  success: boolean;
+  timestamp: string;
+  error?: ErrorData;
+}
+
+export interface MusicianDateilInfo {
+  musicianId: string;
+  firstName: string;
+  lastName: string;
+  gender: number;
+  latestDraft: string;
+  playTimes: number;
+  tuneCoins: number;
+  avatar: string | number;
+  description: string;
+  createdDate: string;
+  createdUser: string;
+  role: string;
+  updatedDate: string | null;
+  updatedUser: string | null;
+  updatedAccount: string | null;
+  works: MusicianDateilInfoWork[];
+  awards: MusicianDateilInfoAward[];
+}
+
+export interface MusicianDateilInfoWork {
+  workId: string;
+  musicianId: string;
+  workStatus: string;
+  workName: string;
+  playTimes: number;
+  tuneCoins: number;
+  avatar: string;
+  description: string;
+}
+
+export interface MusicianDateilInfoAward {
+  awardId: string;
+  musicianId: string;
+  awardName: string;
+  avatar: string | null;
+  description: string;
 }

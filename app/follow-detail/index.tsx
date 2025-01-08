@@ -1,15 +1,48 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import FollowDetailHeader from '@/components/feed/DetailHeader';
 import FollowDetailMediaPlatform from '@/components/feed/DetailMediaPlatform';
 import WorkProgress from '@/components/feed/WorkProgress';
-import workProgressList from '@/data/feed/WorkProgressList';
 import AchievementAwards from '@/components/feed/AchievementAwards';
-import achievementAwardsList from '@/data/feed/AchievementAwardsList';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { useLayoutEffect } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+
+import { get } from '@/api/api';
+import { MusicianDateilData, MusicianDateilInfo } from '@/api/types';
 
 export default function MusicianId() {
   const { id } = useLocalSearchParams();
+
+  console.log(`id===${id}`);
+  const {
+    data: musicianDetailData,
+    isLoading: isMusLoading,
+    error: musicianDetailError,
+  } = useQuery<MusicianDateilData>({
+    queryKey: ['musicianDetailGet'],
+    queryFn: () =>
+      get<MusicianDateilData>(
+        `/musician/get-musician-manage-detail/${id}`
+      ).then(res => res.data),
+  });
+
+  const [musicianDetailContent, setMusicianDetailContent] =
+    useState<MusicianDateilInfo>();
+
+  useEffect(() => {
+    if (
+      musicianDetailData?.data &&
+      musicianDetailData.data !== musicianDetailContent
+    ) {
+      setMusicianDetailContent(musicianDetailData.data);
+    }
+  }, [musicianDetailData]);
 
   const onBackPress = () => {
     router.back();
@@ -35,15 +68,34 @@ export default function MusicianId() {
     console.log('onYoutubeClick----');
   };
 
+  if (isMusLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (musicianDetailError) {
+    return (
+      <Text> Server Exception Load Failure: {musicianDetailError.message}</Text>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <FollowDetailHeader
-        name={'Will Herrington'}
-        role={'Keyboardist · Composer'}
+        name={
+          musicianDetailContent?.firstName +
+          ' ' +
+          musicianDetailContent?.lastName
+        }
+        role={musicianDetailContent?.role ?? ''}
         onBack={onBackPress}
         onCancelFollowClick={onCancelFollowClicl}
       ></FollowDetailHeader>
       <ScrollView
+        contentContainerStyle={styles.scrollContentContainer}
         style={styles.scrollcontainer}
         showsVerticalScrollIndicator={false}
       >
@@ -55,18 +107,10 @@ export default function MusicianId() {
             onYoutubeClick={onYoutubeClick}
           ></FollowDetailMediaPlatform>
           <Text style={styles.description}>
-            Will Herrington is a pianist and composer whose career spans across
-            multiple genres and industries. Emerging from the vibrant streets of
-            New Orleans, he has collaborated with some of the biggest names in
-            music, including Ariana Grande, Nick Jonas, Drake Bell, Alice Smith,
-            Lukas Graham, Sabrina Carpenter, and among countless others. With an
-            eclectic blend of jazz, pop, R&B, and classical influences, Will's
-            music is as diverse as it is captivating.{id}
+            {musicianDetailContent?.description}
           </Text>
-          <WorkProgress dataList={workProgressList}></WorkProgress>
-          <AchievementAwards
-            dataList={achievementAwardsList}
-          ></AchievementAwards>
+          <WorkProgress dataList={musicianDetailContent?.works ?? []} />
+          <AchievementAwards dataList={musicianDetailContent?.awards ?? []} />
         </View>
       </ScrollView>
     </View>
@@ -81,11 +125,19 @@ const styles = StyleSheet.create({
   scrollcontainer: {
     flex: 1,
   },
-
+  scrollContentContainer: {
+    flexGrow: 1,
+  },
   description: {
     paddingHorizontal: 16,
     color: '#7F7779',
     fontSize: 14,
     alignItems: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0E0E0E',
   },
 });

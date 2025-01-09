@@ -31,7 +31,6 @@ export default function FeedScreen() {
       ),
   });
 
-  console.log(musicianData, '>>>>>');
   const [musicianDataList, setMusicianDataList] = useState<MusicianList[]>([]);
   const [musicianDataListTotal, setMusicianDataListTotal] = useState(0);
   const [musicianDataListTotalPages, setMusicianDataListTotalPages] =

@@ -23,8 +23,10 @@
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "expo": "~52.0.10",
+    "expo-auth-session": "~6.0.2",
     "expo-blur": "~14.0.1",
     "expo-constants": "~17.0.3",
+    "expo-dev-client": "~5.0.8",
     "expo-font": "~13.0.1",
     "expo-haptics": "~14.0.0",
     "expo-image": "^2.0.3",
@@ -37,7 +39,7 @@
     "expo-status-bar": "~2.0.0",
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.3",
-    "expo-web-browser": "~14.0.1",
+    "expo-web-browser": "~14.0.2",
     "lucide-react-native": "^0.469.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -49,8 +51,12 @@
     "react-native-svg": "^15.10.1",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.13",
+<<<<<<< HEAD
     "react-native-webview": "^13.12.2",
     "expo-dev-client": "~5.0.9"
+=======
+    "react-native-webview": "^13.12.2"
+>>>>>>> 5fca5409ef681a38d0b044a1c63c97c6a9020100
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -51,12 +51,8 @@
     "react-native-svg": "^15.10.1",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "~0.19.13",
-<<<<<<< HEAD
     "react-native-webview": "^13.12.2",
     "expo-dev-client": "~5.0.9"
-=======
-    "react-native-webview": "^13.12.2"
->>>>>>> 5fca5409ef681a38d0b044a1c63c97c6a9020100
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -8,7 +8,7 @@ WebBrowser.maybeCompleteAuthSession(); // 确保 WebBrowser 正确关闭
 
 export default function WalletScreen() {
     const redirectUriAndroid =  makeRedirectUri({
-        native: "com.fy.tdraft:/oauthredirect",
+        native: "com.fy.tdraft:/draft",   //  /指定Google登录返回路由
         useProxy: true,
     })
     const redirectUriWeb = "http://localhost:8081/"

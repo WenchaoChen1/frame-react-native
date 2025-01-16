@@ -19,7 +19,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.fy.tdraft"
+      "package": "com.fy.tdraft",
+      "config": {
+        "googleSignIn": {
+          "certificateHash": "76:1F:E6:D0:69:F2:96:23:E8:ED:9B:C4:84:FE:67:22:42:00:4F:71"
+        }
+      }
     },
     "web": {
       "bundler": "metro",

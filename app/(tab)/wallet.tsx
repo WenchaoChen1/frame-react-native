@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { makeRedirectUri } from 'expo-auth-session';
+import { router } from 'expo-router';
+import { useQuery } from '@tanstack/react-query';
+import { MusicianDetailData } from '@/api/types';
+import { get } from '@/api/api';
 
 WebBrowser.maybeCompleteAuthSession(); // 确保 WebBrowser 正确关闭
 
@@ -58,10 +62,25 @@ export default function WalletScreen() {
         }
     };
 
+
     const openGoogleLogin = ()=>{
         console.log("isAndroid ?",isAndroid);
         promptAsync();
     }
+
+    // requestUrl:http://192.168.0.111:8103/musician/googleLoginUrl
+    const googleLoginUrl = "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=158104564519-voc1vdk1mo9ujag8qu2iu4o6o1mmviad.apps.googleusercontent.com&redirect_uri=http://localhost:8103/musician/google/login&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email";
+    const urlLogin = () => {
+        if(Platform.OS === 'web'){
+            handleOpenWebPage()
+        }else{
+            router.push({ pathname: '/web-detail',params : {googleLoginUrl}});
+        }
+    }
+
+    const handleOpenWebPage = async () => {
+        await WebBrowser.openBrowserAsync(googleLoginUrl);
+    };
 
     return (
       <View style={styles.container}>
@@ -70,6 +89,13 @@ export default function WalletScreen() {
                   <Text style={styles.buttonLabel}>Google Login</Text>
               </Pressable>
           </View>
+
+          <View style={styles.buttonContainer}>
+              <Pressable style={styles.button} onPress={urlLogin}>
+                  <Text style={styles.buttonLabel}>URL Login</Text>
+              </Pressable>
+          </View>
+
 
           {userInfo ?
             (<View style={styles.infoContainer}>

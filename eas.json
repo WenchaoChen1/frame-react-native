@@ -6,7 +6,10 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "development"
+      }
     },
     "ios-simulator": {
       "extends": "development",
@@ -20,6 +23,9 @@
       },
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "APP_VARIANT": "preview"
       }
     },
     "production": {
@@ -27,7 +33,11 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "credentials.json",
+        "track": "internal"
+      }
+    }
   }
 }
-

@@ -12,7 +12,7 @@ export default function DraftScreen() {
     const [code, setCode] = useState<string | null>(null); // 用于存储 code
     const [isAndroid, setIsAndroid] = useState(Platform.OS==='android');
     const [modalVisible, setModalVisible] = useState(false);
-        const defaultFacebookUrl =`https://www.facebook.com/v3.3/dialog/oauth?response_type=code&client_id=1330399468134867&redirect_uri=http://localhost:8081/learn&scope=email`
+    const defaultFacebookUrl =`https://www.facebook.com/v3.3/dialog/oauth?response_type=code&client_id=1330399468134867&redirect_uri=http://localhost:8081/learn&scope=email`
     const toggleModal = () => {
         setModalVisible(!modalVisible);
     };
@@ -71,37 +71,51 @@ export default function DraftScreen() {
         native: 'http://localhost:8081',
         path: '/draft',
     });
-   const androidRedirectUri = AuthSession.makeRedirectUri({
+ /*  const androidRedirectUri = AuthSession.makeRedirectUri({
         // @ts-ignore
         useProxy: false,
         native: 'com.fy.tdraft',
+        scheme: 'com.fy.tdraft', // 显式指定 scheme
         path: '/draft',
-    });
+    });*/
 
     const webFacebookLogin = async () => {
-        if (request) {
-          // 生成并存储新的 state
-            await promptAsync(); // 传递生成的 state
-        }
-    };
+      if (request) {
+        await promptAsync();
+      }
+    }
     const appFacebookLogin = async () => {
-        if (request) {
-          // 生成并存储新的 state
-            await promptAsync(); // 传递生成的 state
+        if (requestAndroid) {
+            await promptAsyncAndroid();
         }
     };
 
     const [request, response, promptAsync] = Facebook.useAuthRequest({
-        clientId: "1330399468134867",
+       webClientId: "1330399468134867",
         clientSecret:"74d779ce624603867f125847b86c1d20",
         codeChallenge: "",
         codeChallengeMethod: undefined,
         prompt: undefined,
         scopes: ['public_profile','email'],
-        state: state, // 需要一个随机生成的state字符串
+        state: state,
         usePKCE: false,
         responseType: 'code',
-        redirectUri:isAndroid?androidRedirectUri:webRedirectUri, // OAuth 认证成功后回调的 URI
+        redirectUri: webRedirectUri, // OAuth 认证成功后回调的 URI
+    });
+
+    const [requestAndroid, responseAndroid, promptAsyncAndroid] = Facebook.useAuthRequest({
+        clientId: "1330399468134867",
+        androidClientId:"1330399468134867",
+        iosClientId:"1330399468134867r",
+        clientSecret:"74d779ce624603867f125847b86c1d20",
+        codeChallenge: "",
+        codeChallengeMethod: undefined,
+        prompt: undefined,
+        scopes: ['public_profile','email'],
+        state: state,
+        usePKCE: false,
+        responseType: 'code',
+        redirectUri:  `https://auth.expo.io/@coke_hui/TuneDraft`
     });
 
 
@@ -110,9 +124,17 @@ export default function DraftScreen() {
         if (response?.type === 'success') {
             const { code, state: responseState } = response.params;
                 setCode(code); // 存储 code
-                console.log('>>>>>>> Authorization code:', code,'>>>>>>>>>>',responseState,'<<<<<<<',state);
         }
     }, [response]);
+
+    useEffect(() => {
+        console.log(responseAndroid,'reponse');
+        if (responseAndroid?.type === 'success') {
+            const { code, state: responseState } = responseAndroid.params;
+                setCode(code); // 存储 code
+             console.log('>>>>>>> Authorization code:', code,'>>>>>>>>>>',responseState,'<<<<<<<',state);
+        }
+    }, [responseAndroid]);
 
     const onMessage = (event: { nativeEvent: { data: any } }) => {
       const message = event.nativeEvent.data;
@@ -127,7 +149,8 @@ export default function DraftScreen() {
 
     return (
       <View style={styles.container}>
-        <Button title="Login with Facebook" onPress={webFacebookLogin} />
+     { Platform.OS==="web"?<Button title="Login with Facebook" onPress={webFacebookLogin} />: <Button title="Login with Facebook" onPress={appFacebookLogin} />}
+
         {code && (
           <>
             <Text>{code}</Text>
@@ -151,7 +174,6 @@ export default function DraftScreen() {
           </>
         )}
         {loginUserError && <Text>{JSON.stringify(loginUserError)}</Text>}
-        <Button title="Login with Facebook in Android" onPress={appFacebookLogin} />
        {/* {isAndroid && (
           <>
             <Button title="Login with Facebook" onPress={toggleModal} />

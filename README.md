@@ -179,3 +179,13 @@ It can be used for:
       * Confirm and submit the build.
 
 
+Additional Notes: Android Multi-Environment Build Commands
+```bash
+    eas build --platform android --profile development
+```
+```bash
+    eas build --platform android --profile preview
+```
+```bash
+     eas build --platform android --profile production
+```

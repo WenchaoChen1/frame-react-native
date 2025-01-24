@@ -8,6 +8,8 @@
     "scheme": "TuneDraft",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "facebookAppId": "1330399468134867",
+    "facebookDisplayName": "TuneDraft",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.fy.tdraft",

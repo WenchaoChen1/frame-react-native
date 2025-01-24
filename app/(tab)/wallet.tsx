@@ -71,7 +71,7 @@ export default function WalletScreen() {
     }
 
     // requestUrl:http://192.168.0.111:8103/musician/googleLoginUrl
-    const googleLoginUrl = "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=158104564519-voc1vdk1mo9ujag8qu2iu4o6o1mmviad.apps.googleusercontent.com&redirect_uri=http://localhost:8103/musician/google/login&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email";
+    const googleLoginUrl = "https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile&response_type=code&redirect_uri=https://www.baidu.com&client_id=158104564519-voc1vdk1mo9ujag8qu2iu4o6o1mmviad.apps.googleusercontent.com";
     const urlLogin = () => {
         if(Platform.OS === 'web'){
             handleOpenWebPage()

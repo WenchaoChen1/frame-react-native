@@ -1,10 +1,10 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import WorkProgressItem from '@/components/feed/WorkProgressItem';
-import { MusicianDateilInfoWork } from '@/api/types';
+import { MusicianDetailInfoWork } from '@/api/types';
 
 type WorkProgressProps = {
-  dataList: MusicianDateilInfoWork[];
+  dataList: MusicianDetailInfoWork[];
 };
 
 export default function WorkProgress({ dataList }: WorkProgressProps) {

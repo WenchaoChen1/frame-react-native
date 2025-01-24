@@ -91,11 +91,11 @@ export interface MusicianDetailInfo {
   updatedDate: string | null;
   updatedUser: string | null;
   updatedAccount: string | null;
-  works: MusicianDateilInfoWork[];
-  awards: MusicianDateilInfoAward[];
+  works: MusicianDetailInfoWork[];
+  awards: MusicianDetailInfoAward[];
 }
 
-export interface MusicianDateilInfoWork {
+export interface MusicianDetailInfoWork {
   workId: string;
   musicianId: string;
   workStatus: string;
@@ -106,10 +106,20 @@ export interface MusicianDateilInfoWork {
   description: string;
 }
 
-export interface MusicianDateilInfoAward {
+export interface MusicianDetailInfoAward {
   awardId: string;
   musicianId: string;
   awardName: string;
   avatar: string | null;
   description: string;
+}
+
+export interface LoginUrlData {
+  url?:string
+  data?:string
+}
+export interface LoginUserData {
+  email?:string
+  facebookId?:string
+  id?:string
 }

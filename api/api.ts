@@ -1,7 +1,7 @@
 // api/api.ts
 import axios, { AxiosHeaders } from 'axios';
 import { HeadersDefaults, RawAxiosRequestHeaders } from 'axios/index';
-
+import qs from 'qs';
 // 定义 API 的基础 URL
 const BASE_URL = 'http://192.168.0.111:8103';
 
@@ -41,11 +41,11 @@ export const get = async <T>(
 
 // 封装 POST 请求
 export const post = async <T>(
-  url: string,
-  data?: Record<string, any>
-): Promise<ApiResponse<T>> => {
+  url: string, data?: Record<string, any>,  config?: { headers: { 'Content-Type': string } }): Promise<ApiResponse<T>> => {
   try {
-    const response = await apiClient.post<T>(url, data);
+    const response = await apiClient.post<T>(url, qs.stringify(data), {
+      headers: config?.headers, // 传递 headers
+    });
     return {
       data: response.data,
       status: response.status,

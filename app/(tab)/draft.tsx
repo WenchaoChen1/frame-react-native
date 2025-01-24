@@ -1,14 +1,205 @@
-import { AuthProvider, useAuth } from "@/scripts/context/AuthContext";
-import {StyleSheet, Text, View} from "react-native";
-import React from "react";
-
+import { LoginUrlData, LoginUserData } from '@/api/types';
+import React, { useEffect, useState } from 'react';
+import { Button, View, StyleSheet, Text, Platform, Modal } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import { useQuery } from '@tanstack/react-query';
+import * as Facebook from 'expo-auth-session/providers/facebook';
+import { get, post } from '@/api/api';
+import * as AuthSession from 'expo-auth-session';
+import { WebView } from 'react-native-webview';
 export default function DraftScreen() {
+    const [userInfo, setUserInfo] = useState<object | null>(null);
+    const [code, setCode] = useState<string | null>(null); // 用于存储 code
+    const [isAndroid, setIsAndroid] = useState(Platform.OS==='android');
+    const [modalVisible, setModalVisible] = useState(false);
+        const defaultFacebookUrl =`https://www.facebook.com/v3.3/dialog/oauth?response_type=code&client_id=1330399468134867&redirect_uri=http://localhost:8081/learn&scope=email`
+    const toggleModal = () => {
+        setModalVisible(!modalVisible);
+    };
 
-    return <View style={styles.container}>
-            <Text style={styles.title}>
-                Draft screen
+    WebBrowser.maybeCompleteAuthSession();
+
+
+    const generateState = () => {
+        return   Math.random().toString(36).substring(2, 15);
+    };
+    const [state, setState] = useState<string>(generateState());
+
+
+    const {
+        data: facebookAuthUri,
+        isLoading: isURlLoading,
+        error: musicianError,
+    } = useQuery<LoginUrlData>({
+        queryKey: ['loginUrlGet'],
+        queryFn: () =>
+          get<LoginUrlData>('/musician/facebookLoginUrl').then(
+            res => res.data
+          ),
+    });
+
+    // 返回用户信息
+    const {
+      data: loginUserData,
+      error: loginUserError,
+    } = useQuery<LoginUserData>({
+      queryKey: ['loginUser', code],
+      queryFn: () =>
+        post<LoginUserData>(
+          '/musician/facebook/loginTest',
+          { credential: code },
+          {
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+              },
+          }
+        )
+          .then(res => res.data)
+          .catch(error => {
+            console.error(
+              'Request Error:',
+              error.response?.data || error.message
+            );
+            throw error;
+          }),
+      enabled: !!code,
+    });
+
+    const webRedirectUri = AuthSession.makeRedirectUri({
+        // @ts-ignore
+        useProxy: false,
+        native: 'http://localhost:8081',
+        path: '/draft',
+    });
+   const androidRedirectUri = AuthSession.makeRedirectUri({
+        // @ts-ignore
+        useProxy: false,
+        native: 'com.fy.tdraft',
+        path: '/draft',
+    });
+
+    const webFacebookLogin = async () => {
+        if (request) {
+          // 生成并存储新的 state
+            await promptAsync(); // 传递生成的 state
+        }
+    };
+    const appFacebookLogin = async () => {
+        if (request) {
+          // 生成并存储新的 state
+            await promptAsync(); // 传递生成的 state
+        }
+    };
+
+    const [request, response, promptAsync] = Facebook.useAuthRequest({
+        clientId: "1330399468134867",
+        clientSecret:"74d779ce624603867f125847b86c1d20",
+        codeChallenge: "",
+        codeChallengeMethod: undefined,
+        prompt: undefined,
+        scopes: ['public_profile','email'],
+        state: state, // 需要一个随机生成的state字符串
+        usePKCE: false,
+        responseType: 'code',
+        redirectUri:isAndroid?androidRedirectUri:webRedirectUri, // OAuth 认证成功后回调的 URI
+    });
+
+
+    useEffect(() => {
+        console.log(response,'reponse');
+        if (response?.type === 'success') {
+            const { code, state: responseState } = response.params;
+                setCode(code); // 存储 code
+                console.log('>>>>>>> Authorization code:', code,'>>>>>>>>>>',responseState,'<<<<<<<',state);
+        }
+    }, [response]);
+
+    const onMessage = (event: { nativeEvent: { data: any } }) => {
+      const message = event.nativeEvent.data;
+      const parsedData = JSON.parse(message); // 假设发送的是 JSON 格式
+
+      if (parsedData.loggedIn) {
+        // 登录成功，保存信息
+        setUserInfo(parsedData.user);
+        toggleModal(); // 关闭 WebView 弹框
+      }
+    };
+
+    return (
+      <View style={styles.container}>
+        <Button title="Login with Facebook" onPress={webFacebookLogin} />
+        {code && (
+          <>
+            <Text>{code}</Text>
+            <Text>{JSON.stringify(code)}</Text>
+          </>
+        )}
+        {response && (
+          <>
+            <Text>{response.type}</Text>
+            <Text>{JSON.stringify(response)}</Text>
+          </>
+        )}
+        {loginUserData && (
+          <>
+            <Text style={styles.userInfo}>
+              {`User Info: ${loginUserData.id}`}
             </Text>
-        </View>
+            <Text style={styles.userInfo}>
+              {`User Info: ${loginUserData.email}`}
+            </Text>
+          </>
+        )}
+        {loginUserError && <Text>{JSON.stringify(loginUserError)}</Text>}
+        <Button title="Login with Facebook in Android" onPress={appFacebookLogin} />
+       {/* {isAndroid && (
+          <>
+            <Button title="Login with Facebook" onPress={toggleModal} />
+            {userInfo && <Text>{JSON.stringify(userInfo)}</Text>}
+            <Modal
+              visible={modalVisible}
+              animationType="slide"
+              onRequestClose={toggleModal}
+              transparent={true}
+            >
+              <Button title="关闭" onPress={toggleModal} />
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <View
+                  style={{
+                    width: '90%',
+                    height: '80%',
+                    backgroundColor: 'white',
+                  }}
+                >
+                  <WebView
+                    source={{
+                      uri:
+                        typeof facebookAuthUri === 'string'
+                          ? facebookAuthUri
+                          : defaultFacebookUrl,
+                    }}
+                    onMessage={onMessage}
+                    javaScriptEnabled={true}
+                    injectedJavaScript={`
+                function loginSuccess(userData) {
+                  window.ReactNativeWebView.postMessage(JSON.stringify({ loggedIn: true, user: userData }));
+                }
+                setTimeout(() => loginSuccess({ username: 'example', token: 'abc123' }), 3000);
+              `}
+                  />
+                </View>
+              </View>
+            </Modal>
+          </>
+        )}*/}
+      </View>
+    );
 }
 
 
@@ -24,7 +215,11 @@ const styles = StyleSheet.create({
         fontSize: 64,
         fontWeight: "bold",
         color: "#38434D",
-    }
+    },
+    userInfo: {
+        marginTop: 20,
+        textAlign: 'center',
+    },
 
 
 })

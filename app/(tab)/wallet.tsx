@@ -11,8 +11,10 @@ import { get } from '@/api/api';
 WebBrowser.maybeCompleteAuthSession(); // 确保 WebBrowser 正确关闭
 
 export default function WalletScreen() {
+    // @ts-ignore
     const redirectUriAndroid =  makeRedirectUri({
         native: "com.fy.tdraft:/draft",   //  /指定Google登录返回路由
+        // @ts-ignore
         useProxy: true,
     })
     const redirectUriWeb = "http://localhost:8081/"
@@ -81,6 +83,8 @@ export default function WalletScreen() {
     const handleOpenWebPage = async () => {
         await WebBrowser.openBrowserAsync(googleLoginUrl);
     };
+
+
 
     return (
       <View style={styles.container}>

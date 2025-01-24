@@ -1,10 +1,10 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import AchievementAwardsItem from '@/components/feed/AchievementAwardsItem';
-import { MusicianDateilInfoAward } from '@/api/types';
+import { MusicianDetailInfoAward } from '@/api/types';
 
 type AchievementAwardsProps = {
-  dataList: MusicianDateilInfoAward[];
+  dataList: MusicianDetailInfoAward[];
 };
 export default function AchievementAwards({
   dataList,

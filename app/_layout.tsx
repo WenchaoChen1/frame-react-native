@@ -43,6 +43,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       {Platform.OS === 'web' &&<ReactQueryDevtools initialIsOpen={false} />
 }
+     {/*@ts-ignore*/}
       <AuthProvider value={value}>
         <Stack initialRouteName="login">
           <Stack.Screen name="login"

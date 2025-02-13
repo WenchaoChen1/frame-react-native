@@ -1,6 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, Platform, Alert, Linking } from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity, Platform, Alert, Linking, ActivityIndicator } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
@@ -14,6 +15,8 @@ type Props = {
 const LoginPage = ({}:Props) => {
   const [selectedRole, setSelectedRole] = React.useState<string | null>(null);
   const [code, setCode] = useState<string | null>(null);
+  const [userInfo, setUserInfo] = useState();
+  const [loading, setLoading] = useState(true);
   const redirectUriWeb = "http://localhost:8081/"
   const isAndroid = Platform.OS === 'android'; 
   const redirectUriAndroid = makeRedirectUri({
@@ -21,19 +24,6 @@ const LoginPage = ({}:Props) => {
     // @ts-ignore
     useProxy: true,
   })
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: '306687462640-ffl2m3nbom4qt2q3p25q7oal79f51jee.apps.googleusercontent.com',
-    iosClientId: '306687462640-ttdagd2ehm3h6asuc185s9til6kaag89.apps.googleusercontent.com',
-    webClientId: '158104564519-voc1vdk1mo9ujag8qu2iu4o6o1mmviad.apps.googleusercontent.com',
-    redirectUri: isAndroid ? redirectUriAndroid : redirectUriWeb,
-    responseType: 'code',
-    clientSecret:"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",
-    scopes: ['openid', 'profile', 'email'],
-  });
-
-  const [userInfo, setUserInfo] = useState(null);
-
   const roleList =[{
     id:'listener',
     title:"Listener",
@@ -44,7 +34,34 @@ const LoginPage = ({}:Props) => {
     title:"Artist",
     desc:"Share Your Drafts",
     url:`@/assets/images/artist.png`
-  },]
+  }]
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId:
+      '306687462640-ffl2m3nbom4qt2q3p25q7oal79f51jee.apps.googleusercontent.com',
+    iosClientId:
+      '306687462640-ttdagd2ehm3h6asuc185s9til6kaag89.apps.googleusercontent.com',
+    webClientId:
+      '306687462640-u3bhdth2p9gqboq44auhacme79rlhekc.apps.googleusercontent.com',
+    redirectUri: isAndroid ? redirectUriAndroid : redirectUriWeb,
+    responseType: 'code',
+    scopes: ['openid', 'profile', 'email'],
+  });
+
+const AndroidUrl="https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=306687462640-u3bhdth2p9gqboq44auhacme79rlhekc.apps.googleusercontent.com&redirect_uri=https://auth.expo.io/@coke_hui/TuneDraft/&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email"
+
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { code } = response.params; // 从回调参数中获取授权码
+      console.log('授权码:', code);
+
+      const { authentication } = response;
+      getGoogleUserInfo((authentication as any).accessToken);
+
+    }
+  }, [response]);
+
 
   const getGoogleUserInfo = async (accessToken: string) => {
     console.log('accessToken :', accessToken);
@@ -69,16 +86,7 @@ const LoginPage = ({}:Props) => {
     if (Platform.OS === 'web') {
       await handleWebLogin(); // 使用新的web端处理函数
     }else {
-      try {
-        const result = await promptAsync();
-        if (result?.type === 'success') {
-          const { code } = result.params;
-          setCode(code);
-          console.log("code:",code);
-        }
-      } catch (error) {
-        console.error('Google login error:', error);
-      }
+      await promptAsync()
     }
   }
 
@@ -91,7 +99,7 @@ const LoginPage = ({}:Props) => {
       post<LoginUserData>(
         '/musician/google/logintest',
         { credential: code ,
-          role:selectedRole
+            role:selectedRole
         },
         {
             headers: {
@@ -120,8 +128,7 @@ const LoginPage = ({}:Props) => {
     });
   }
 
-
-  // 添加查询获取登录URL的逻辑
+  // 添加查询获取web登录URL的逻辑
   const {
     data: googleAuthUrl,
     isLoading: isUrlLoading,
@@ -129,14 +136,11 @@ const LoginPage = ({}:Props) => {
     queryKey: ['googleLoginUrl'],
     queryFn: () =>
       get('/musician/googleLoginUrl').then(res => res.data),
-    enabled: Platform.OS === 'web' // 仅在web端启用此查询
+      enabled: Platform.OS === 'web' // 仅在web端启用此查询
   });
 
   const handleWebLogin = async () => {
     if (!googleAuthUrl) return;
-
-    // 使用state参数防止CSRF攻击
-    const state = Math.random().toString(36).substring(2, 15);
 
     // 使用AuthSession.startAsync处理web端OAuth流程
     const result = await WebBrowser.openAuthSessionAsync(
@@ -144,7 +148,7 @@ const LoginPage = ({}:Props) => {
       redirectUriWeb,
       {
         showInRecents: true,
-        preferEphemeralSession: true
+        preferEphemeralSession: true,
       }
     );
 
@@ -157,9 +161,33 @@ const LoginPage = ({}:Props) => {
       }
     }
   };
+  useEffect(() => {
+    const storeUserData = async () => {
+      if (loginUserData) {
+        try {
+          if (Platform.OS === 'web') {
+            // For web, use localStorage
+            localStorage.setItem('userData', JSON.stringify(loginUserData));
+          } else {
+            // For mobile, use AsyncStorage
+            await AsyncStorage.setItem('userData', JSON.stringify(loginUserData));
+          }
+          // Navigate to main tab screen after successful storage
+          router.replace('/(tab)');
+        } catch (error) {
+          console.error('Error storing user data:', error);
+        }
+      }
+    };
+
+    storeUserData();
+  }, [loginUserData]);
 
 
-  return <View style={styles.container}>
+  return <View style={styles.container}>      
+    {loading && <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color="#956eb7" />
+    </View>}
     <LinearGradient
       colors={["#332042","#130d17","#1e1e1e"]}
       style={styles.background}
@@ -357,7 +385,13 @@ const styles = StyleSheet.create({
     fontWeight: 'semibold',
     textAlign: 'center',
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 
 });
+
 
 

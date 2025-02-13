@@ -17,6 +17,7 @@ const LoginPage = ({}:Props) => {
   const [code, setCode] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState();
   const [loading, setLoading] = useState(true);
+  const [authentication, setAuthentication] = useState<string | null>();
   const redirectUriWeb = "http://localhost:8081/"
   const isAndroid = Platform.OS === 'android'; 
   const redirectUriAndroid = makeRedirectUri({
@@ -38,11 +39,11 @@ const LoginPage = ({}:Props) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
-    process.env.androidClientId,
+      "306687462640-ffl2m3nbom4qt2q3p25q7oal79f51jee.apps.googleusercontent.com",
     iosClientId:
-    process.env.iosClientId,
+      "306687462640-ttdagd2ehm3h6asuc185s9til6kaag89.apps.googleusercontent.com",
     webClientId:
-    process.env.webClientId,
+      "306687462640-u3bhdth2p9gqboq44auhacme79rlhekc.apps.googleusercontent.com",
     redirectUri: isAndroid ? redirectUriAndroid : redirectUriWeb,
     responseType: 'code',
     scopes: ['openid', 'profile', 'email'],
@@ -57,11 +58,39 @@ const AndroidUrl="https://accounts.google.com/o/oauth2/auth?access_type=offline&
       console.log('授权码:', code);
 
       const { authentication } = response;
-      getGoogleUserInfo((authentication as any).accessToken);
+      // @ts-ignore
+      setAuthentication(authentication)
+      // getGoogleUserInfo((authentication as any).accessToken);
 
     }
   }, [response]);
-
+  const {
+    data: userData,
+  } = useQuery<LoginUserData>({
+    queryKey: ['loginUser', authentication],
+    queryFn: () =>
+      post<LoginUserData>(
+        '/musician/google/getUserInfo',
+        { accessToken: authentication ,
+          role:selectedRole
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      )
+      .then(res => res.data)
+      .catch(error => {
+        console.error(
+          'Request Error:',
+          error.response?.data || error.message
+        );
+        throw error;
+      }),
+    enabled: !!authentication,
+  });
+  console.log("userData",userData);
 
   const getGoogleUserInfo = async (accessToken: string) => {
     console.log('accessToken :', accessToken);

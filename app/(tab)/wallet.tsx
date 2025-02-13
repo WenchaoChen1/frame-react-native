@@ -23,11 +23,11 @@ export default function WalletScreen() {
     const [userInfo, setUserInfo] = useState(null);
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId:
-        process.env.androidClientId,
+          "306687462640-ffl2m3nbom4qt2q3p25q7oal79f51jee.apps.googleusercontent.com",
         iosClientId:
-        process.env.iosClientId,
+          "306687462640-ttdagd2ehm3h6asuc185s9til6kaag89.apps.googleusercontent.com",
         webClientId:
-        process.env.webClientId,
+          "306687462640-u3bhdth2p9gqboq44auhacme79rlhekc.apps.googleusercontent.com",
      //   redirectUri: 'http://localhost:8081/',
         redirectUri: isAndroid ? redirectUriAndroid :redirectUriWeb,
         responseType: 'code', // 请求授权码

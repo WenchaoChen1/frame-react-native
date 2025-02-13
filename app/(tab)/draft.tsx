@@ -91,7 +91,7 @@ export default function DraftScreen() {
     const [requestAndroid, responseAndroid, promptAsyncAndroid] = Facebook.useAuthRequest({
         clientId: "1330399468134867",
         androidClientId:"1330399468134867",
-        iosClientId:"1330399468134867r",
+        iosClientId:"1330399468134867",
         clientSecret:"74d779ce624603867f125847b86c1d20",
         codeChallenge: "",
         codeChallengeMethod: undefined,

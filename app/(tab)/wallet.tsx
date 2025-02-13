@@ -33,6 +33,56 @@ export default function WalletScreen() {
         responseType: 'code', // 请求授权码
         scopes: ['openid', 'profile', 'email'], // 请求所需的作用域
     });
+    // 添加查询获取登录URL的逻辑
+    const {
+        data: googleAuthUrl,
+        isLoading: isUrlLoading,
+    } = useQuery({
+        queryKey: ['googleLoginUrl'],
+        queryFn: () => 
+            get('/musician/googleLoginUrl').then(res => res.data),
+        enabled: Platform.OS === 'web' // 仅在web端启用此查询
+    });
+
+    // 修改web端登录处理函数
+
+    const handleWebLogin = async () => {
+        if (!googleAuthUrl) return;
+        
+        // 使用state参数防止CSRF攻击
+        const state = Math.random().toString(36).substring(2, 15);
+        
+        // 使用AuthSession.startAsync处理web端OAuth流程
+        const result = await WebBrowser.openAuthSessionAsync(
+          typeof googleAuthUrl === 'string' ? googleAuthUrl :"",
+            redirectUriWeb,
+            {
+                showInRecents: true,
+                preferEphemeralSession: true
+            }
+        );
+        
+        if (result.type === 'success') {
+            const url = result.url;
+            // 从URL中提取code参数
+            const code = new URL(url).searchParams.get('code');
+            if (code) {
+                console.log('获取到授权码:', code);
+            }
+        }
+    };
+
+    // 修改urlLogin函数
+    const urlLogin = () => {
+        if (Platform.OS === 'web') {
+            handleWebLogin(); // 使用新的web端处理函数
+        } else {
+            router.push({ 
+                pathname: '/web-detail',
+                params: { googleLoginUrl }
+            });
+        }
+    };
 
     useEffect(() => {
         if (response?.type === 'success') {
@@ -72,13 +122,7 @@ export default function WalletScreen() {
 
     // requestUrl:http://192.168.0.111:8103/musician/googleLoginUrl
     const googleLoginUrl = "https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile&response_type=code&redirect_uri=https://www.baidu.com&client_id=158104564519-voc1vdk1mo9ujag8qu2iu4o6o1mmviad.apps.googleusercontent.com";
-    const urlLogin = () => {
-        if(Platform.OS === 'web'){
-            handleOpenWebPage()
-        }else{
-            router.push({ pathname: '/web-detail',params : {googleLoginUrl}});
-        }
-    }
+ 
 
     const handleOpenWebPage = async () => {
         await WebBrowser.openBrowserAsync(googleLoginUrl);

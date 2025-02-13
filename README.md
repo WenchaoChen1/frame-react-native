@@ -189,3 +189,19 @@ Additional Notes: Android Multi-Environment Build Commands
 ```bash
      eas build --platform android --profile production
 ```
+
+## 项目需求
+
+1. 需要使用google登录，登录以后根据后台返回信息，确认登录用户角色
+
+2. 登录用户角色分为listener和artist，listener可以听歌，artist可以发布作品
+
+3. 不同角色登录后进入不同Home页，Home页需要根据角色判断，需要Search Music/Artist 搜索框可用 
+
+4. Artist和Listener的Home页可搜索当前系统中的Artist，搜索出结果后点击Artist头像可打开该Artist BIO页
+
+5. Artist和Listener可通过Artist BIO页关注或取关该Artist，关注结果会在Following页中展示
+
+6. Artist和Listener的Home页可搜索当前系统中的作品，搜索出结果后点击作品头像可打开该作品BIO页
+
+7. Artist和Listener可通过作品BIO页点赞，收藏，分享该作品

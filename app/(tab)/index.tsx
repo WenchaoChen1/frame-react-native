@@ -1,4 +1,5 @@
-import {Image, StyleSheet, Text, View} from "react-native";
+import { router } from 'expo-router';
+import { Button, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import React from "react";
 
 const PlaceholderImage = require("@/assets/images/background-image.png");
@@ -9,6 +10,7 @@ export default function Index(){
         <Text style={styles.title}>
             Home screen
         </Text>
+      <Pressable onPress={()=>{router.push('/login')}}><Text style={styles.title}>GO Login</Text></Pressable>
     </View>
 }
 

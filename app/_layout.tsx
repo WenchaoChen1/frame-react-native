@@ -44,7 +44,13 @@ export default function RootLayout() {
       {Platform.OS === 'web' &&<ReactQueryDevtools initialIsOpen={false} />
 }
       <AuthProvider value={value}>
-        <Stack>
+        <Stack initialRouteName="login">
+          <Stack.Screen name="login"
+                        options={{
+                          headerShown: false,
+                          headerTitle:'login',
+                          headerBackVisible:false,
+          }} />
           <Stack.Screen name="(tab)" options={{ headerShown: false }} />
           <Stack.Screen
             name="follow-detail/index"

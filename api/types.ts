@@ -121,5 +121,6 @@ export interface LoginUrlData {
 export interface LoginUserData {
   email?:string
   facebookId?:string
-  id?:string
+  id?:string  
+  role?:string
 }

@@ -103,9 +103,9 @@ export default function WalletScreen() {
 
           {userInfo ?
             (<View style={styles.infoContainer}>
-                <Text style={styles.infoTitle}>Name: {userInfo.name}</Text>
-                <Text style={styles.infoTitle}>Email: {userInfo.email}</Text>
-                <Text style={styles.infoTitle}>ID: {userInfo.id}</Text>
+                <Text style={styles.infoTitle}>Name: {userInfo?.name}</Text>
+                <Text style={styles.infoTitle}>Email: {userInfo?.email}</Text>
+                <Text style={styles.infoTitle}>ID: {userInfo?.id}</Text>
             </View>) : (<View></View>)
           }
       </View>

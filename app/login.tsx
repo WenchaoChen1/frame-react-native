@@ -1,5 +1,6 @@
+import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image, Text, TouchableOpacity, Platform, Alert } from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity, Platform, Alert, Linking } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
@@ -65,17 +66,19 @@ const LoginPage = ({}:Props) => {
 
   const loginByGoogle = async () => {
     console.log('loginByGoogle');
-    try {
-      const result = await promptAsync();
-      if (result?.type === 'success') {
-        const { code } = result.params;
-        setCode(code);
-        console.log("code:",code);
-        const { authentication } = result;
-        await getGoogleUserInfo((authentication as any).accessToken);
+    if (Platform.OS === 'web') {
+      await handleWebLogin(); // 使用新的web端处理函数
+    }else {
+      try {
+        const result = await promptAsync();
+        if (result?.type === 'success') {
+          const { code } = result.params;
+          setCode(code);
+          console.log("code:",code);
+        }
+      } catch (error) {
+        console.error('Google login error:', error);
       }
-    } catch (error) {
-      console.error('Google login error:', error);
     }
   }
 
@@ -116,6 +119,45 @@ const LoginPage = ({}:Props) => {
       skipRedirectCheck: true
     });
   }
+
+
+  // 添加查询获取登录URL的逻辑
+  const {
+    data: googleAuthUrl,
+    isLoading: isUrlLoading,
+  } = useQuery({
+    queryKey: ['googleLoginUrl'],
+    queryFn: () =>
+      get('/musician/googleLoginUrl').then(res => res.data),
+    enabled: Platform.OS === 'web' // 仅在web端启用此查询
+  });
+
+  const handleWebLogin = async () => {
+    if (!googleAuthUrl) return;
+
+    // 使用state参数防止CSRF攻击
+    const state = Math.random().toString(36).substring(2, 15);
+
+    // 使用AuthSession.startAsync处理web端OAuth流程
+    const result = await WebBrowser.openAuthSessionAsync(
+      typeof googleAuthUrl === 'string' ? googleAuthUrl :"",
+      redirectUriWeb,
+      {
+        showInRecents: true,
+        preferEphemeralSession: true
+      }
+    );
+
+    if (result.type === 'success') {
+      const url = result.url;
+      const code = new URL(url).searchParams.get('code');
+      if (code) {
+        console.log('获取到授权码:', code);
+        setCode(code)
+      }
+    }
+  };
+
 
   return <View style={styles.container}>
     <LinearGradient

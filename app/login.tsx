@@ -38,11 +38,11 @@ const LoginPage = ({}:Props) => {
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId:
-      '306687462640-ffl2m3nbom4qt2q3p25q7oal79f51jee.apps.googleusercontent.com',
+    process.env.androidClientId,
     iosClientId:
-      '306687462640-ttdagd2ehm3h6asuc185s9til6kaag89.apps.googleusercontent.com',
+    process.env.iosClientId,
     webClientId:
-      '306687462640-u3bhdth2p9gqboq44auhacme79rlhekc.apps.googleusercontent.com',
+    process.env.webClientId,
     redirectUri: isAndroid ? redirectUriAndroid : redirectUriWeb,
     responseType: 'code',
     scopes: ['openid', 'profile', 'email'],

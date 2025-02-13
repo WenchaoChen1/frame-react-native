@@ -23,11 +23,11 @@ export default function WalletScreen() {
     const [userInfo, setUserInfo] = useState(null);
     const [request, response, promptAsync] = Google.useAuthRequest({
         androidClientId:
-          '306687462640-ffl2m3nbom4qt2q3p25q7oal79f51jee.apps.googleusercontent.com',
+        process.env.androidClientId,
         iosClientId:
-          '306687462640-ttdagd2ehm3h6asuc185s9til6kaag89.apps.googleusercontent.com',
+        process.env.iosClientId,
         webClientId:
-          '306687462640-u3bhdth2p9gqboq44auhacme79rlhekc.apps.googleusercontent.com',
+        process.env.webClientId,
      //   redirectUri: 'http://localhost:8081/',
         redirectUri: isAndroid ? redirectUriAndroid :redirectUriWeb,
         responseType: 'code', // 请求授权码
@@ -48,9 +48,6 @@ export default function WalletScreen() {
 
     const handleWebLogin = async () => {
         if (!googleAuthUrl) return;
-        
-        // 使用state参数防止CSRF攻击
-        const state = Math.random().toString(36).substring(2, 15);
         
         // 使用AuthSession.startAsync处理web端OAuth流程
         const result = await WebBrowser.openAuthSessionAsync(

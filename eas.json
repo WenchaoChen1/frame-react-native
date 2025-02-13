@@ -8,7 +8,13 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "APP_VARIANT": "development"
+        "APP_VARIANT": "development",
+        "androidClientId":
+        "306687462640-ffl2m3nbom4qt2q3p25q7oal79f51jee.apps.googleusercontent.com",
+        "iosClientId":
+        "306687462640-ttdagd2ehm3h6asuc185s9til6kaag89.apps.googleusercontent.com",
+        "webClientId":
+        "306687462640-u3bhdth2p9gqboq44auhacme79rlhekc.apps.googleusercontent.com"
       }
     },
     "ios-simulator": {
